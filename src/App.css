@@ -1,38 +1,97 @@
-.App {
-  text-align: center;
+.container {
+  margin: 10px;
+  padding: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.barBtn {
+  padding: 10px;
+  margin: 0px 10px;
+  background-color: #ad793e;
+  border: none;
+  border-radius: 2px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input {
+  width: 90%;
+  padding: 5px;
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 3px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.topBar {
+  margin-top: 10px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  margin-bottom: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  background-color: #c3c3c3;
+  width: 258px;
+  margin: 8px 8px;
+  border: 1px solid black;
+  border-radius: 6px;
+}
+
+img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+p {
+  margin: 10px 0px;
+}
+
+.listData {
+  margin-left: 8px;
+  margin-top: 13px;
+}
+
+.listBtn {
+  margin-top: 20px;
+}
+
+.btn {
+  margin-right: 5px;
+}
+
+.formCon {
+  width: 40%;
+  margin: auto;
+  padding-top: 30px;
+}
+
+input[id=name],[id=phone] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.addBtn {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button.add {
+  background-color: #ad793e;
+  border: none;
+  border-radius: 3px;
+  padding: 10px;
+  width: 49%;
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
