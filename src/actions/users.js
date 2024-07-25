@@ -5,34 +5,26 @@ const request = axios.create({
     timeout: 1000,
 })
 
-export const loadUser = () => dispatch => request.get('phonebooks').then(({ data }) => {
+export const loadUser = (limit = 25) => dispatch => request.get('phonebooks', { params: { limit } }).then(({ data }) => {
     dispatch({ type: 'LOAD_USER_SUCCESS', users: data })
 }).catch((err) => {
     dispatch({ type: 'LOAD_USER_FAILED' })
 })
 
-
-const addUserFailed = (id) => ({
-    type: 'ADD_USER_FAILED',
-    id
+export const addUser = (user) => dispatch => request.post('phonebooks', user).then(({ data }) => {
+    dispatch({ type: 'ADD_USER_SUCCESS' })
+}).catch((err) => {
+    dispatch({ type: 'ADD_USER_FAILED' })
 })
 
-const addUserSuccess = (user) => ({
-    type: 'ADD_USER_SUCCESS',
-    user
+export const updateUser = (id, user) => dispatch => request.put(`phonebooks/${id}`, user).then(({ data }) => {
+    dispatch({ type: 'UPDATE_USER_SUCCESS', id, user: data })
+}).catch((err) => {
+    dispatch({ type: 'UPDATE_USER_FAILED' })
 })
 
-const addUserDraw = (user) => ({
-    type: 'ADD_USER',
-    user
+export const removeUser = (id) => dispatch => request.delete(`phonebooks/${id}`).then(() => {
+    dispatch({ type: 'REMOVE_USER_SUCCESS', id })
+}).catch((err) => {
+    dispatch({ type: 'REMOVE_USER_FAILED' })
 })
-
-export const addUser = (name, phone) => dispatch => {
-    const id = Date.now()
-    dispatch(addUserDraw({ id, name, phone }))
-    return dispatch => request.post('phonebooks', { name, phone }).then(({ data }) => {
-        dispatch(addUserSuccess(id, name, phone))
-    }).catch((err) => {
-        dispatch(addUserFailed(id))
-    })
-}

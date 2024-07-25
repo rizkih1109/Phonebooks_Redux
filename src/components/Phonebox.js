@@ -9,7 +9,7 @@ export default function PhoneBox() {
                 <PhoneBar />
             </div> 
             <div className="cardList">
-                <PhoneList/>
+                <PhoneList />
             </div>
         </div>
     )
