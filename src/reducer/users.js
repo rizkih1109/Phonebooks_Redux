@@ -1,20 +1,28 @@
 const users = (state = { Phonebooks: [], limit: 25, page: 1, total: 1, pages: 1 }, action) => {
     switch (action.type) {
         case 'LOAD_USER_SUCCESS':
-            return { ...action.users }
+            return { ...action.users, sort: action.sort, keyword: action.keyword }
 
         case 'ADD_USER_SUCCESS':
             return [...state, action.user]
 
         case 'UPDATE_USER_SUCCESS':
+            console.log(state.sort)
+            console.log(state.keyword)
+            const update = state.Phonebooks.map(item => item.id === action.id ? { ...item, ...action.user } : item)
+            const updateSort = update.sort((a, b) => {
+                if (state.sort === 'asc') return a.name.localeCompare(b.name)
+                else if (state.sort === 'desc') return b.name.localeCompare(a.name)
+                return 0;
+            })
+            const updateSearch = updateSort.filter(item => {
+                return item.name.toLowerCase().includes(state.keyword.toLowerCase()) ||
+                    item.phone.toLowerCase().includes(state.keyword.toLowerCase())
+            })
+
             return {
-                Phonebooks: state.Phonebooks.map((item) => {
-                    if (item.id === action.id) {
-                        item.name = action.user.name;
-                        item.phone = action.user.phone;
-                    }
-                    return item;
-                })
+                ...state,
+                Phonebooks: updateSearch
             }
 
         case 'REMOVE_USER_SUCCESS':

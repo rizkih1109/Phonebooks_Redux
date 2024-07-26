@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
 import PhoneCard from "./PhoneCard"
 import { useEffect, useState } from 'react'
-import { loadUser } from '../actions/users'
+import { loadUser, updateUser } from '../actions/users'
 import Modal from './Modal'
 
 
-export default function PhoneList() {
+export default function PhoneList({ sort, keyword }) {
 
     const [isModal, setIsModal] = useState(false)
     const [selectedUser, setSelectedUser] = useState(null)
@@ -13,20 +13,26 @@ export default function PhoneList() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(loadUser())
-    }, [dispatch])
+        dispatch(loadUser(25, sort, keyword))
+    }, [dispatch, sort, keyword])
 
     const modal = (user) => {
         setSelectedUser(user)
         setIsModal(true)
     }
 
-    const cards = users.Phonebooks.map((item, index) => (<PhoneCard key={index} user={item} modal={modal} />))
+    const handleUpdate = (id, user) => {
+        dispatch(updateUser(id, user)).then(() => {
+            dispatch(loadUser(sort, keyword))
+        })
+    }
+
+    const cards = users.Phonebooks.map((item) => (<PhoneCard key={item.id} user={item} modal={modal} />))
 
     return (
         <>
             {cards}
-            {isModal && <Modal user={selectedUser} setIsModal={setIsModal} />}
+            {isModal && <Modal user={selectedUser} setIsModal={setIsModal} handleUpdate={handleUpdate} />}
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { updateUser } from "../actions/users"
 
@@ -14,6 +14,10 @@ export default function PhoneCard({ user, modal }) {
         setIsEdit(false)
     }
 
+    useEffect(() => {
+        setNewUser({ id: user.id, name: user.name, phone: user.phone });
+    }, [user]);
+
     if (isEdit) {
         return (
             <div className="card">
@@ -22,11 +26,11 @@ export default function PhoneCard({ user, modal }) {
                 </div>
                 <form className="listData" onSubmit={submit}>
                     <div >
-                        <input id="edit" value={newUser.name} onChange={(e) => setNewUser({...newUser, name: e.target.value})} />
-                        <input id="edit" value={newUser.phone} onChange={(e) => setNewUser({...newUser, phone: e.target.value})} />
+                        <input id="edit" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} />
+                        <input id="edit" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
                     </div>
                     <div className="saveBtn">
-                        <button type="submit">
+                        <button type="submit" className="fixSaveBtn">
                             <i className="fa-solid fa-floppy-disk" ></i>
                         </button>
                     </div>

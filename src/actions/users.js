@@ -5,14 +5,18 @@ const request = axios.create({
     timeout: 1000,
 })
 
-export const loadUser = (limit = 25) => dispatch => request.get('phonebooks', { params: { limit } }).then(({ data }) => {
-    dispatch({ type: 'LOAD_USER_SUCCESS', users: data })
+export const loadUser = (limit = 25, sort = 'asc', keyword = '') => dispatch => request.get('phonebooks', {
+    params: {
+        limit, sort, keyword
+    }
+}).then(({ data }) => {
+    dispatch({ type: 'LOAD_USER_SUCCESS', users: data, sort: sort, keyword: keyword })
 }).catch((err) => {
     dispatch({ type: 'LOAD_USER_FAILED' })
 })
 
 export const addUser = (user) => dispatch => request.post('phonebooks', user).then(({ data }) => {
-    dispatch({ type: 'ADD_USER_SUCCESS' })
+    dispatch({ type: 'ADD_USER_SUCCESS', data })
 }).catch((err) => {
     dispatch({ type: 'ADD_USER_FAILED' })
 })

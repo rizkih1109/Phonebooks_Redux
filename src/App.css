@@ -183,5 +183,12 @@ input[id=edit]{
 }
 
 .saveBtn {
-  margin-top: 5px;
+  margin-top: 7px;
+}
+
+.fixSaveBtn {
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  font-size: 16px;
 }
