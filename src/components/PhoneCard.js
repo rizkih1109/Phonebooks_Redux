@@ -1,17 +1,33 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
-import { updateUser } from "../actions/users"
+import { updateAvatar, updateUser } from "../actions/users"
 
 export default function PhoneCard({ user, modal }) {
 
     const [isEdit, setIsEdit] = useState(false)
-    const [newUser, setNewUser] = useState({ id: user.id, name: user.name, phone: user.phone })
+    const [newUser, setNewUser] = useState({ id: user.id, name: user.name, phone: user.phone, avatar: user.avatar })
     const dispatch = useDispatch()
+    const fileInputRef = useRef(null)
 
     const submit = (e) => {
         e.preventDefault()
         dispatch(updateUser(newUser.id, newUser))
         setIsEdit(false)
+    }
+
+    const handleImage = (e) => {
+        if (e.target.files || e.target.files.length > 0) {
+            const file = e.target.files[0]
+
+            const formData = new FormData()
+            formData.append('avatar', file)
+            console.log(...formData)
+            dispatch(updateAvatar(newUser.id, formData))
+        } 
+    }
+
+    const clickImage = () => {
+        fileInputRef.current.click()
     }
 
     useEffect(() => {
@@ -22,7 +38,7 @@ export default function PhoneCard({ user, modal }) {
         return (
             <div className="card">
                 <div>
-                    <img src="../images/Defaultavatar.png" alt='no source' />
+                    <img src={user.avatar == null ? '../pictures/Defaultavatar.png' : `http://localhost:3000/images/${user.avatar}`} alt='no source'></img>
                 </div>
                 <form className="listData" onSubmit={submit}>
                     <div >
@@ -41,7 +57,12 @@ export default function PhoneCard({ user, modal }) {
         return (
             <div className="card">
                 <div>
-                    <img src="../images/Defaultavatar.png" alt='no source' />
+                    <img
+                        src={user.avatar == null ? '../pictures/Defaultavatar.png' : `http://localhost:3000/images/${user.avatar}`}
+                        alt='no source'
+                        onClick={clickImage}
+                    />
+                    <input type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImage} />
                 </div>
                 <div className="listData">
                     <div >
