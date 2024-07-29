@@ -1,19 +1,35 @@
 import { useSelector, useDispatch } from 'react-redux'
 import PhoneCard from "./PhoneCard"
 import { useEffect, useState } from 'react'
-import { loadUser, updateUser } from '../actions/users'
+import { loadUser, loadPage } from '../actions/users'
 import Modal from './Modal'
 
 
 export default function PhoneList({ sort, keyword }) {
 
+    const dispatch = useDispatch()
     const [isModal, setIsModal] = useState(false)
     const [selectedUser, setSelectedUser] = useState(null)
     const users = useSelector(state => state.users)
-    const dispatch = useDispatch()
+    const [page, setPage] = useState(1)
 
     useEffect(() => {
-        dispatch(loadUser(25, sort, keyword))
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+            if (scrollTop + clientHeight >= scrollHeight - 1) {
+                const newPage = page + 1
+                setPage(newPage)
+                dispatch(loadPage(newPage, 25, sort, keyword))
+            }
+        }
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [dispatch, page, sort, keyword])
+
+    useEffect(() => {
+        setPage(1)
+        dispatch(loadUser(1, 25, sort, keyword))
     }, [dispatch, sort, keyword])
 
     const modal = (user) => {
@@ -21,18 +37,12 @@ export default function PhoneList({ sort, keyword }) {
         setIsModal(true)
     }
 
-    const handleUpdate = (id, user) => {
-        dispatch(updateUser(id, user)).then(() => {
-            dispatch(loadUser(sort, keyword))
-        })
-    }
-
     const cards = users.Phonebooks.map((item) => (<PhoneCard key={item.id} user={item} modal={modal} />))
 
     return (
         <>
             {cards}
-            {isModal && <Modal user={selectedUser} setIsModal={setIsModal} handleUpdate={handleUpdate} />}
+            {isModal && <Modal user={selectedUser} setIsModal={setIsModal} />}
         </>
     )
 }

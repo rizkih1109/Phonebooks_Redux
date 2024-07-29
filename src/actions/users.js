@@ -5,14 +5,20 @@ const request = axios.create({
     timeout: 1000,
 })
 
-export const loadUser = (limit = 25, sort = 'asc', keyword = '') => dispatch => request.get('phonebooks', {
-    params: {
-        limit, sort, keyword
-    }
+export const loadUser = (page = 1, limit = 25, sort = 'asc', keyword = '') => dispatch => request.get('phonebooks', {
+    params: { limit, sort, keyword, page }
 }).then(({ data }) => {
-    dispatch({ type: 'LOAD_USER_SUCCESS', users: data, sort: sort, keyword: keyword })
+    dispatch({ type: 'LOAD_USER_SUCCESS', users: data, sort: sort, keyword: keyword, page: page })
 }).catch((err) => {
     dispatch({ type: 'LOAD_USER_FAILED' })
+})
+
+export const loadPage = (page = 2, limit = 25, sort = 'asc', keyword = '') => dispatch => request.get('phonebooks', {
+    params: { limit, sort, keyword, page }
+}).then(({ data }) => {
+    dispatch({ type: 'LOAD_PAGE_SUCCESS', users: data, sort: sort, keyword: keyword, page: page })
+}).catch((err) => {
+    dispatch({ type: 'LOAD_PAGE_FAILED' })
 })
 
 export const addUser = (user) => dispatch => request.post('phonebooks', user).then(({ data }) => {
@@ -25,6 +31,18 @@ export const updateUser = (id, user) => dispatch => request.put(`phonebooks/${id
     dispatch({ type: 'UPDATE_USER_SUCCESS', id, user: data })
 }).catch((err) => {
     dispatch({ type: 'UPDATE_USER_FAILED' })
+})
+
+export const updateAvatar = (id, file) => dispatch => request.put(`phonebooks/${id}/avatar`, file, {
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+}).then(({ data }) => {
+    console.log('berhasil')
+    dispatch({ type: 'UPDATE_AVATAR_SUCCESS', id, avatar: data.avatar })
+}).catch((err) => {
+    console.log('gagal')
+    dispatch({ type: 'UPDATE_AVATAR_FAILED' })
 })
 
 export const removeUser = (id) => dispatch => request.delete(`phonebooks/${id}`).then(() => {

@@ -1,7 +1,13 @@
 const users = (state = { Phonebooks: [], limit: 25, page: 1, total: 1, pages: 1 }, action) => {
     switch (action.type) {
         case 'LOAD_USER_SUCCESS':
-            return { ...action.users, sort: action.sort, keyword: action.keyword }
+            return { ...action.users, sort: action.sort, keyword: action.keyword, page: action.page }
+
+        case 'LOAD_PAGE_SUCCESS':
+            return {
+                ...state,
+                Phonebooks: [...state.Phonebooks, ...action.users.Phonebooks], page: action.page
+            }
 
         case 'ADD_USER_SUCCESS':
             return [...state, action.user]
@@ -25,6 +31,12 @@ const users = (state = { Phonebooks: [], limit: 25, page: 1, total: 1, pages: 1 
                 Phonebooks: updateSearch
             }
 
+        case 'UPDATE_AVATAR_SUCCESS':
+            return {
+                ...state,
+                Phonebooks: state.Phonebooks.map(item => item.id === action.id ? { ...item, avatar: action.avatar } : item)
+            }
+
         case 'REMOVE_USER_SUCCESS':
             return {
                 ...state,
@@ -32,8 +44,10 @@ const users = (state = { Phonebooks: [], limit: 25, page: 1, total: 1, pages: 1 
             }
 
         case 'LOAD_USER_FAILED':
+        case 'LOAD_PAGE_FAILED':
         case 'ADD_USER_FAILED':
         case 'UPDATE_USER_FAILED':
+        case 'UPDATE_AVATAR_FAILED':
         case 'REMOVE_USER_FAILED':
 
         default:

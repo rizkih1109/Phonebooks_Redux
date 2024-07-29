@@ -4,9 +4,6 @@ import { removeUser } from '../actions/users'
 export default function Modal({ user, setIsModal }) {
     
     const dispatch = useDispatch()
-
-    console.log(user)
-
     const remove = () => {
         dispatch(removeUser(user.id))
         setIsModal(false)
